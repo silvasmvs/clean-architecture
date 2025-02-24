@@ -11,6 +11,10 @@ export default class Terminal {
         terminal.clear();
     }
 
+    static showKeyValue(key: string, value: any) {
+        terminal.yellow(`${key}: `).cyan(`${value}`).white('\n');
+    }
+
     static async menu(options: string[]) {
         const result = await terminal.singleColumnMenu(options).promise;
 
@@ -30,5 +34,10 @@ export default class Terminal {
         terminal.yellow(`\n${text}`);
         const result = await terminal.singleLineMenu(['Yes', 'No']).promise;
         return result.selectedIndex === 0;
+    }
+
+    static async waitEnter() {
+        terminal.yellow(`\nPress Enter to continue...`);
+        await terminal.inputField({ echo: false }).promise;
     }
 }
