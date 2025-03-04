@@ -15,6 +15,15 @@ export default class Terminal {
         terminal.yellow(`${key}: `).cyan(`${value}`).white('\n');
     }
 
+    static async requiredField(label: string, defaultValue: string = ''): Promise<string> {
+        terminal.yellow(`\n${label}`);
+        const value = await terminal.inputField({ default: defaultValue }).promise;
+        if(value) {
+            return value;
+        }
+        return Terminal.requiredField(label);
+    }
+
     static async menu(options: string[]) {
         const result = await terminal.singleColumnMenu(options).promise;
 
@@ -39,5 +48,9 @@ export default class Terminal {
     static async waitEnter() {
         terminal.yellow(`\nPress Enter to continue...`);
         await terminal.inputField({ echo: false }).promise;
+    }
+
+    static async success(text: string) {
+        terminal.green(`\n${text}\n`);
     }
 }
