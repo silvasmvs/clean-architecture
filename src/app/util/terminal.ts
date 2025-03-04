@@ -50,7 +50,11 @@ export default class Terminal {
         await terminal.inputField({ echo: false }).promise;
     }
 
-    static async success(text: string) {
-        terminal.green(`\n${text}\n`);
+    static async success(text: string, newRow: boolean = true) {
+        terminal.green((newRow ? `\n` : ``) + text);
+    }
+
+    static async error(text: string, newRow: boolean = true) {
+        terminal.red((newRow ? `\n` : ``) + text);
     }
 }
