@@ -1,8 +1,10 @@
 import SpacePasswordCrypt from "@/adapter/auth/SpacePasswordCrypt";
+import UserInMemoryRepository from "@/adapter/db/userInMemoryRepository";
 import TerminalUtil from "@/app/util/terminal";
 import User from "@/core/user/model/User";
 import CreateUser from "@/core/user/services/createUser";
 import EncriptPassword from "@/core/user/services/encryptPassword";
+import UserRepository from "@/core/user/services/UserRepository";
 
 export default async function createUser() {
     TerminalUtil.title('Create User');
@@ -13,10 +15,11 @@ export default async function createUser() {
 
     const user: User = { name, email, password };
 
+    const repository = new UserInMemoryRepository();
+
     const encriptProvider = new SpacePasswordCrypt();
-    // new SpacePasswordCrypt();
-    // //new EncriptPassword();
-    const useCase = new CreateUser(encriptProvider);
+
+    const useCase = new CreateUser(repository, encriptProvider);
 
     useCase.execute(user);
 
