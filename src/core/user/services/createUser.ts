@@ -3,11 +3,19 @@ import User from "../model/User";
 import UserInMemoryRepository from "./userInMemoryRepository";
 import Errors from "@/core/shared/Errors";
 import Id from "@/core/shared/Id";
+import EncryptProvider from "./EncryptProvider";
+import EncryptPassword from "./encryptPassword";
 
 
 export default class CreateUser implements UseCase<User, void> {
+
+    constructor(
+        private encryptProvider: EncryptProvider
+    ){}
+
     async execute(user: User): Promise<void> {
-        const password = user.password.split('').reverse().join('');
+        const EncryptClass = new EncryptPassword;
+        const password = this.encryptProvider.encrypt(user.password);
 
         const repository = new UserInMemoryRepository();
 

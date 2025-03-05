@@ -1,6 +1,8 @@
+import SpacePasswordCrypt from "@/adapter/auth/SpacePasswordCrypt";
 import TerminalUtil from "@/app/util/terminal";
 import User from "@/core/user/model/User";
 import CreateUser from "@/core/user/services/createUser";
+import EncriptPassword from "@/core/user/services/encryptPassword";
 
 export default async function createUser() {
     TerminalUtil.title('Create User');
@@ -11,14 +13,19 @@ export default async function createUser() {
 
     const user: User = { name, email, password };
 
-    await new CreateUser().execute(user);
+    const encriptProvider = new SpacePasswordCrypt();
+    // new SpacePasswordCrypt();
+    // //new EncriptPassword();
+    const useCase = new CreateUser(encriptProvider);
+
+    useCase.execute(user);
 
     TerminalUtil.success('User created successfully!');
 
     await TerminalUtil.waitEnter();
 
     try {
-        await new CreateUser().execute(user);
+        await useCase.execute(user);
     }
     catch (e: any) {
         TerminalUtil.error('Error creating user: ' + e.message);
