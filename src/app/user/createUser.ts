@@ -1,21 +1,26 @@
 import SpacePasswordCrypt from "@/adapter/auth/SpacePasswordCrypt";
-import UserInMemoryRepository from "@/adapter/db/userInMemoryRepository";
+import UserRepositoryPg from "@/adapter/db/UserRepositoryPG";
 import TerminalUtil from "@/app/util/terminal";
 import User from "@/core/user/model/User";
 import CreateUser from "@/core/user/services/createUser";
-import EncriptPassword from "@/core/user/services/encryptPassword";
-import UserRepository from "@/core/user/services/UserRepository";
 
 export default async function createUser() {
-    TerminalUtil.title('Create User');
+    const {
+        title,
+        requiredField,
+        success,
+        waitEnter,
+        error
+    } = TerminalUtil;
+    title('Create User');
 
-    const name = await TerminalUtil.requiredField('Name: ', 'Ana da silva');
-    const email = await TerminalUtil.requiredField('Email: ', 'ana.silva@test.com.br');
-    const password = await TerminalUtil.requiredField('Password: ', 'abcdef');
+    const name = await requiredField('Name: ');
+    const email = await requiredField('Email: ');
+    const password = await requiredField('Password: ');
 
     const user: User = { name, email, password };
 
-    const repository = new UserInMemoryRepository();
+    const repository = new UserRepositoryPg();
 
     const encriptProvider = new SpacePasswordCrypt();
 
@@ -23,16 +28,16 @@ export default async function createUser() {
 
     useCase.execute(user);
 
-    TerminalUtil.success('User created successfully!');
+    success('User created successfully!');
 
-    await TerminalUtil.waitEnter();
+    await waitEnter();
 
     try {
         await useCase.execute(user);
     }
     catch (e: any) {
-        TerminalUtil.error('Error creating user: ' + e.message);
+        error('Error creating user: ' + e.message);
     } finally {
-        await TerminalUtil.waitEnter();
+        await waitEnter();
     }
 }

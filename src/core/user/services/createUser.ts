@@ -22,6 +22,8 @@ export default class CreateUser implements UseCase<User, void> {
         // const repository = new UserInMemoryRepository();
 
         const isUserExists = await this.repository.findByEmail(user.email); 
+
+        console.log('isUserExists: ', isUserExists);
         if(isUserExists) throw new Error(Errors.USER_ALREADY_EXISTS);
 
         const newUser = {
