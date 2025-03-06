@@ -15,13 +15,13 @@ export default class CreateUser implements UseCase<User, void> {
     ){}
 
     async execute(user: User): Promise<void> {
-        const password = this.encryptProvider.encrypt(user.password);
-
+        
+        const password = this.encryptProvider.encrypt(user.password ?? '');
+        
         // const repository = new UserInMemoryRepository();
 
         const isUserExists = await this.repository.findByEmail(user.email); 
 
-        console.log('isUserExists: ', isUserExists);
         if(isUserExists) throw new Error(Errors.USER_ALREADY_EXISTS);
 
         const newUser = {
@@ -32,7 +32,5 @@ export default class CreateUser implements UseCase<User, void> {
         }
 
         this.repository.create(newUser);
-
-        console.log('password: ', password);
     }
 }
