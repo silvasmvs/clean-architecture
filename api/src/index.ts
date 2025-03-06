@@ -4,6 +4,8 @@ import CreateUser from "./core/user/services/CreateUser";
 import UserRepositoryPg from "./external/db/UserRepositoryPg";
 import SpacePasswordCrypt from "./external/auth/SpacePasswordCrypt";
 import CreateUserController from "./external/api/CreateUserController";
+import AuthUser from "./core/user/services/AuthUser";
+import AuthUserController from "./external/api/AuthUserController";
 
 
 dotenv.config({ path: ".env" });
@@ -20,9 +22,16 @@ app.listen(port, () => {
 // Public routes
 const userRepositoryPg = new UserRepositoryPg();
 const spacePasswordCrypt = new SpacePasswordCrypt();
+
 const createUser = new CreateUser(
     userRepositoryPg,
     spacePasswordCrypt
 );
 
+const authUser = new AuthUser(
+    userRepositoryPg,
+    spacePasswordCrypt
+)
+
 new CreateUserController(app, createUser);
+new AuthUserController(app, authUser);

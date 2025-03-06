@@ -6,4 +6,8 @@ export default class SpacePasswordCrypt implements EncryptProvider {
         const salt = bcrypt.genSaltSync(10);
         return bcrypt.hashSync(data, salt);
     }
+
+    async compare(password: string, hash: string): Promise<boolean> {
+        return bcrypt.compare(password, hash);
+    }
 }

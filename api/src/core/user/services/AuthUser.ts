@@ -29,7 +29,7 @@ export default class AuthUser implements UseCase<AuthUserInput, AuthUserOutput> 
             throw new Error(Errors.USER_NOT_FOUND);
         }
         
-        const compare = this.encryptProvider.compare(input.password, user.password!);
+        const compare = await this.encryptProvider.compare(input.password, user.password!);
 
         if(!compare) {
             throw new Error(Errors.INVALID_PASSWORD);

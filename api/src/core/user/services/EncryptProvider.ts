@@ -2,5 +2,5 @@
 // The port is part of the application core 
 export default interface EncryptProvider {
     encrypt(password: string): string;
-    compare(password: string, encryptedPassword: string): boolean;
+    compare(password: string, hash: string): Promise<boolean>;
 }

@@ -10,6 +10,6 @@ export default class UserRepositoryPg {
 
     async findByEmail(email: string): Promise<User | null> {
         const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-        return user.length ?? null;
+        return user.length ? user[0] : null;
     }
 }
